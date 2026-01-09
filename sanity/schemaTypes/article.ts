@@ -38,5 +38,14 @@ export default defineType({
             title: 'Published at',
             type: 'datetime',
         }),
+        defineField({
+            name: 'seo',
+            title: 'SEO Settings',
+            type: 'seo',
+            group: 'seo'
+        })
     ],
+    groups: [
+        { name: 'seo', title: 'SEO' }
+    ]
 })

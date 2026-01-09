@@ -1,7 +1,8 @@
 import { getVideo } from '@/lib/sanity';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { Calendar, Tag, ChevronLeft } from 'lucide-react';
+import { ArrowLeft, Calendar, Tag, ChevronLeft } from 'lucide-react';
+import { Metadata } from 'next';
 
 export const revalidate = 60;
 
@@ -10,6 +11,28 @@ function getYouTubeId(url: string) {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
     return (match && match[2].length === 11) ? match[2] : null;
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params;
+    const video = await getVideo(slug);
+
+    if (!video) return {};
+
+    const videoId = video.youtubeUrl ? getYouTubeId(video.youtubeUrl) : null;
+    const ogImage = video.seo?.shareImage || (videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : '');
+
+    return {
+        title: video.seo?.metaTitle || `${video.title} | TAstudio`,
+        description: video.seo?.metaDescription || video.description?.slice(0, 160),
+        openGraph: {
+            images: [ogImage],
+        },
+        robots: {
+            index: !video.seo?.noIndex,
+            follow: !video.seo?.noIndex,
+        }
+    }
 }
 
 export default async function VideoPage({ params }: { params: Promise<{ slug: string }> }) {

@@ -5,7 +5,11 @@ import { ShoppingCart, Menu, X, Mic2, Tv, BookOpen } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useCart } from '@/store/useCart';
 
-export default function Navbar() {
+interface NavbarProps {
+    logo?: string;
+}
+
+export default function Navbar({ logo }: NavbarProps) {
     const [isOpen, setIsOpen] = useState(false);
 
     const items = useCart((state) => state.items);
@@ -22,8 +26,12 @@ export default function Navbar() {
                 <div className="flex items-center justify-between h-16">
                     {/* Logo */}
                     <div className="flex-shrink-0">
-                        <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                            TAstudio<span className="text-white">.live</span>
+                        <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent flex items-center gap-2">
+                            {logo ? (
+                                <img src={logo} alt="TAstudio Logo" className="h-10 w-auto object-contain" />
+                            ) : (
+                                <>TAstudio<span className="text-white">.live</span></>
+                            )}
                         </Link>
                     </div>
 

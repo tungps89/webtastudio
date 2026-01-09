@@ -4,8 +4,28 @@ import { ShoppingCart, Check, ShieldCheck, Truck, Phone, MapPin, Share2, Message
 import Link from 'next/link';
 import { PortableText } from '@portabletext/react';
 import AddToCartButton from '@/components/AddToCartButton';
+import { Metadata } from 'next';
 
 export const revalidate = 60;
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params;
+    const product = await getProduct(slug);
+
+    if (!product) return {};
+
+    return {
+        title: product.seo?.metaTitle || `${product.title} | TAstudio`,
+        description: product.seo?.metaDescription || product.description?.slice(0, 160),
+        openGraph: {
+            images: [product.seo?.shareImage || product.images?.[0] || ''],
+        },
+        robots: {
+            index: !product.seo?.noIndex,
+            follow: !product.seo?.noIndex,
+        }
+    }
+}
 
 export default async function ProductDetailPage({
     params,

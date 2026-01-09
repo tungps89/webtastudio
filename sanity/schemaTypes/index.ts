@@ -6,7 +6,9 @@ import video from './video'
 import category from './category'
 import order from './order'
 import bannerQC from './bannerQC'
+import seo from './seo'
+import settings from './settings'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-    types: [product, banner, article, video, category, order, bannerQC],
+    types: [product, banner, article, video, category, order, bannerQC, seo, settings],
 }

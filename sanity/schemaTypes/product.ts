@@ -49,5 +49,15 @@ export default defineType({
             type: 'text',
             rows: 4
         }),
+        defineField({
+            name: 'seo',
+            title: 'SEO Settings',
+            type: 'seo',
+            group: 'seo'
+        })
     ],
+    groups: [
+        { name: 'seo', title: 'SEO' }
+    ]
 })
+

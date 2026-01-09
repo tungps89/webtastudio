@@ -3,8 +3,28 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { Calendar, ChevronLeft, User } from 'lucide-react';
 import { PortableText } from '@portabletext/react';
+import { Metadata } from 'next';
 
 export const revalidate = 60;
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+    const { slug } = await params;
+    const article = await getArticle(slug);
+
+    if (!article) return {};
+
+    return {
+        title: article.seo?.metaTitle || `${article.title} | TAstudio`,
+        description: article.seo?.metaDescription || article.title,
+        openGraph: {
+            images: [article.seo?.shareImage || article.image || ''],
+        },
+        robots: {
+            index: !article.seo?.noIndex,
+            follow: !article.seo?.noIndex,
+        }
+    }
+}
 
 export default async function ArticlePage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;

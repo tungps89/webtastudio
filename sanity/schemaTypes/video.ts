@@ -35,5 +35,15 @@ export default defineType({
             type: 'array',
             of: [{ type: 'string' }],
         }),
+        defineField({
+            name: 'seo',
+            title: 'SEO Settings',
+            type: 'seo',
+            group: 'seo'
+        })
     ],
+    groups: [
+        { name: 'seo', title: 'SEO' }
+    ]
 })
+

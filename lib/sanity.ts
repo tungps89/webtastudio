@@ -49,7 +49,11 @@ export async function getArticle(slug: string) {
       "slug": slug.current,
       "image": coverImage.asset->url,
       content,
-      publishedAt
+      publishedAt,
+      "seo": seo {
+        ...,
+        "shareImage": shareImage.asset->url
+      }
     }
   `, { slug });
 }
@@ -62,6 +66,23 @@ export async function getBanners() {
       "image": image.asset->url,
       buttonText,
       link
+    }
+  `);
+}
+
+export async function getSettings() {
+  return client.fetch(`
+    *[_type == "settings"][0] {
+      title,
+      "logo": logo.asset->url,
+      "socialLinks": socialLinks[] {
+        platform,
+        url
+      },
+      "seo": seo {
+        ...,
+        "shareImage": shareImage.asset->url
+      }
     }
   `);
 }
@@ -111,7 +132,11 @@ export async function getProduct(slug: string) {
       "category": category->title,
       "images": images[].asset->url,
       description,
-      techSpecs
+      techSpecs,
+      "seo": seo {
+        ...,
+        "shareImage": shareImage.asset->url
+      }
     }
   `, { slug });
 }

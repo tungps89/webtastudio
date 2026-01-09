@@ -1,7 +1,20 @@
-import { Facebook, Youtube, Instagram, Mail, Phone, MapPin } from 'lucide-react';
+interface FooterProps {
+    socialLinks?: { platform: string; url: string }[];
+}
+
+import { Facebook, Youtube, Instagram, Mail, Phone, MapPin, Globe } from 'lucide-react';
 import Link from 'next/link';
 
-export default function Footer() {
+export default function Footer({ socialLinks }: FooterProps) {
+    const getSocialIcon = (platform: string) => {
+        switch (platform.toLowerCase()) {
+            case 'facebook': return <Facebook size={20} />;
+            case 'youtube': return <Youtube size={20} />;
+            case 'instagram': return <Instagram size={20} />;
+            default: return <Globe size={20} />;
+        }
+    };
+
     return (
         <footer className="bg-studio-panel border-t border-white/5 pt-16 pb-8">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -15,9 +28,19 @@ export default function Footer() {
                             Chuyên cung cấp thiết bị thu âm, livestream chính hãng và giải pháp phần mềm âm thanh chuyên nghiệp.
                         </p>
                         <div className="flex space-x-4">
-                            <a href="#" className="text-zinc-400 hover:text-primary transition-colors"><Facebook size={20} /></a>
-                            <a href="#" className="text-zinc-400 hover:text-red-500 transition-colors"><Youtube size={20} /></a>
-                            <a href="#" className="text-zinc-400 hover:text-pink-500 transition-colors"><Instagram size={20} /></a>
+                            {socialLinks && socialLinks.length > 0 ? (
+                                socialLinks.map((link) => (
+                                    <a key={link.platform} href={link.url} target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-primary transition-colors">
+                                        {getSocialIcon(link.platform)}
+                                    </a>
+                                ))
+                            ) : (
+                                <>
+                                    <a href="#" className="text-zinc-400 hover:text-primary transition-colors"><Facebook size={20} /></a>
+                                    <a href="#" className="text-zinc-400 hover:text-red-500 transition-colors"><Youtube size={20} /></a>
+                                    <a href="#" className="text-zinc-400 hover:text-pink-500 transition-colors"><Instagram size={20} /></a>
+                                </>
+                            )}
                         </div>
                     </div>
 
